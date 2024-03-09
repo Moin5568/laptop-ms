@@ -22,7 +22,7 @@ pipeline {
         }
         stage('Code Package') {
             steps {
-                echo 'Creating Jar Artifact'
+                echo 'Creating War Artifact'
                 sh 'mvn clean package'
             }
         }
