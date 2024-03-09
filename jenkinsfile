@@ -20,13 +20,13 @@ pipeline {
                 sh 'mvn clean test'
             }
         }
-        stage('Code Package') {
-            steps {
+               stage('Code Package') {
+                    steps {
                 echo 'Creating War Artifact'
                 sh 'mvn clean package'
             }
         }
-stage('Building & Tag Docker Image') {
+                stage('Building & Tag Docker Image') {
                     steps {
                         echo 'Starting Building Docker Image'
                         sh 'docker build -t moin2410/laptop-ms .'
