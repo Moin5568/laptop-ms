@@ -1,32 +1,38 @@
 pipeline {
+
     options {
         buildDiscarder(logRotator(numToKeepStr: '5', artifactNumToKeepStr: '5'))
     }
+
     agent any
+
     tools {
         maven 'maven_3.9.6'
     }
+
     stages {
         stage('Code Compilation') {
             steps {
                 echo 'Code Compilation is started'
                 sh 'mvn clean compile'
-                echo 'Code Compilation is Completed Successfully!'
+				echo 'Code Compilation is Completed Successfully!'
             }
         }
         stage('Code QA Execution') {
             steps {
-            echo 'Junit Test case check in Progress!'
+                echo 'Junit Test case check in Progress!'
                 sh 'mvn clean test'
             }
         }
-               stage('Code Package') {
-                    steps {
+
+        stage('Code Package') {
+            steps {
                 echo 'Creating War Artifact'
                 sh 'mvn clean package'
+                echo 'MVN package is completed'
             }
         }
-                stage('Building & Tag Docker Image') {
+         stage('Building & Tag Docker Image') {
                     steps {
                         echo 'Starting Building Docker Image'
                         sh 'docker build -t moin2410/laptop-ms .'
@@ -41,11 +47,11 @@ pipeline {
                         echo 'Docker Image Scanning Started'
                     }
                 }
-                stage(' Docker push to Docker Hub') {
+                stage('Docker push to Docker Hub') {
                    steps {
                       script {
-                         withCredentials([string(credentialsId: 'DockerhubCred', variable: 'DockerhubCred')]){
-                         sh 'docker login docker.io -u moin2410 -p ${DockerhubCred}'
+                         withCredentials([string(credentialsId: 'dockerhubCred', variable: 'dockerhubCred')]){
+                         sh 'docker login docker.io -u moin2410 -p ${dockerhubCred}'
                          echo "Push Docker Image to DockerHub : In Progress"
                          sh 'docker push moin2410/laptop-ms:latest'
                          echo "Push Docker Image to DockerHub : Completed"
@@ -53,22 +59,19 @@ pipeline {
                       }
                     }
                 }
-                stage(' Docker Image Push to Amazon ECR') {
-                   steps {
+                stage('Docker Image Push to Amazon ECR') {
+                   steps{
                       script {
                          withDockerRegistry([credentialsId:'ecr:ap-south-1:ecr-credentials', url: "https://454428789626.dkr.ecr.ap-south-1.amazonaws.com/laptop-ms"]){
                          sh """
                          echo "Tagging the Docker Image: In Progress"
-                         docker tag makemytrip-ms:${BUILD_NUMBER} 454428789626.dkr.ecr.ap-south-1.amazonaws.com/laptop-ms:${BUILD_NUMBER}
-                         echo "Tagging the Docker Image: Completed"
+                         docker tag laptop-ms:latest 454428789626.dkr.ecr.ap-south-1.amazonaws.com/laptop-ms:latest
+                         echo "Tagging the Docker Image : Completed"
                          echo "Push Docker Image to ECR : In Progress"
-                         docker push 454428789626.dkr.ecr.ap-south-1.amazonaws.com/laptop-ms:${BUILD_NUMBER}
+                         docker push 454428789626.dkr.ecr.ap-south-1.amazonaws.com/laptop-ms:latest
                          echo "Push Docker Image to ECR : Completed"
                          """
                          }
                       }
-
                    }
-                }
-                }
                 }
