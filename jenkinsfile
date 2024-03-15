@@ -75,5 +75,23 @@ pipeline {
                       }
                    }
                 }
-                }
-                }
+                stage('Upload the docker Image to Nexus')
+                				  {
+
+                                 steps {
+
+                                 script {
+
+                                 withCredentials ([usernamePassword(credentialsId: 'nexuscred', usernameVariable: 'USERNAME' , passwordVariable: 'PASSWORD')])
+                                 {
+                                 sh 'docker login http://13.232.93.205:8081/repository/laptop-ms/ -u admin -p ${PASSWORD}'
+                                 echo "Push Docker Image to Nexus: In Progress"
+                                 sh 'docker tag laptop-ms 13.232.93.205:8085/laptop-ms:latest'
+                                 sh 'docker push 13.232.93.205:8085/laptop-ms'
+                                 echo "Push Docker Image to Nexus: Completed"
+                                 }
+                                 }
+                                  }
+                                     }
+                                     }
+                                     }
