@@ -63,10 +63,10 @@ pipeline {
                     withDockerRegistry([credentialsId:'ecr:ap-south-1:ecr-credentials', url: "https://454428789626.dkr.ecr.ap-south-1.amazonaws.com/laptop-ms"]){
                         sh """
                         echo "Tagging the Docker Image: In Progress"
-                        docker tag laptop-ms:${BUILD_NUMBER} 454428789626.dkr.ecr.ap-south-1.amazonaws.com/laptop-ms:${BUILD_NUMBER}
+                        docker tag laptop-ms:latest 454428789626.dkr.ecr.ap-south-1.amazonaws.com/laptop-ms:latest
                         echo "Tagging the Docker Image : Completed"
                         echo "Push Docker Image to ECR : In Progress"
-                        docker push 454428789626.dkr.ecr.ap-south-1.amazonaws.com/laptop-ms:${BUILD_NUMBER}
+                        docker push 454428789626.dkr.ecr.ap-south-1.amazonaws.com/laptop-ms:latest
                         echo "Push Docker Image to ECR : Completed"
                         """
                     }
@@ -79,7 +79,7 @@ pipeline {
                     withCredentials ([usernamePassword(credentialsId: 'nexuscred', usernameVariable: 'USERNAME' , passwordVariable: 'PASSWORD')]) {
                         sh 'docker login http://43.205.112.213:8085/repository/laptop-ms/ -u admin -p ${PASSWORD}'
                         echo "Push Docker Image to Nexus: In Progress"
-                        sh 'docker tag laptop-ms 43.205.112.213:8085/laptop-ms:${BUILD_NUMBER}'
+                        sh 'docker tag laptop-ms 43.205.112.213:8085/laptop-ms:latest'
                         sh 'docker push 43.205.112.213:8085/laptop-ms'
                         echo "Push Docker Image to Nexus: Completed"
                     }
