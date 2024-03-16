@@ -63,7 +63,7 @@ pipeline {
                     withDockerRegistry([credentialsId:'ecr:ap-south-1:ecr-credentials', url: "https://454428789626.dkr.ecr.ap-south-1.amazonaws.com/laptop-ms"]){
                         sh """
                         echo "Tagging the Docker Image: In Progress"
-                        docker tag laptop-ms:latest 454428789626.dkr.ecr.ap-south-1.amazonaws.com/laptop-ms:${BUILD_NUMBER}
+                        docker tag laptop-ms:${BUILD_NUMBER} 454428789626.dkr.ecr.ap-south-1.amazonaws.com/laptop-ms:${BUILD_NUMBER}
                         echo "Tagging the Docker Image : Completed"
                         echo "Push Docker Image to ECR : In Progress"
                         docker push 454428789626.dkr.ecr.ap-south-1.amazonaws.com/laptop-ms:${BUILD_NUMBER}
