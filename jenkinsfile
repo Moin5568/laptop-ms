@@ -51,7 +51,7 @@ pipeline {
                     withCredentials([string(credentialsId: 'DockerhubCred', variable: 'DockerhubCred')]){
                         sh 'docker login docker.io -u moin2410 -p ${DockerhubCred}'
                         echo "Push Docker Image to DockerHub : In Progress"
-                        sh 'docker push moin2410/laptop-ms:latest'
+                        sh 'docker push moin2410/laptop-ms:${BUILD_NUMBER}'
                         echo "Push Docker Image to DockerHub : Completed"
                     }
                 }
