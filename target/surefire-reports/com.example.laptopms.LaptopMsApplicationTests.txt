@@ -1,4 +1,4 @@
 -------------------------------------------------------------------------------
 Test set: com.example.laptopms.LaptopMsApplicationTests
 -------------------------------------------------------------------------------
-Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 8.824 s -- in com.example.laptopms.LaptopMsApplicationTests
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 5.814 s -- in com.example.laptopms.LaptopMsApplicationTests
